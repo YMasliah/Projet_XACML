@@ -31,25 +31,40 @@ public class DomSample {
 	public void printTree(Node n) {
 	    if (n.getNodeType() == org.w3c.dom.Node.TEXT_NODE) {
 
-	        System.out.print(n.getNodeValue());
+	        //System.out.print(n.getNodeValue());
 	       
 	    } else if (n instanceof Comment) {
 
 	        System.out.printf("<!-- %s -->", n.getNodeValue());
 
 	    } else if (n instanceof Element) {
-
-	        System.out.printf("<%s>", n.getNodeName());
-	        if(n.hasAttributes())
-	        	printTrees(n.getAttributes());
+	    	
+	    	easyNodeName(n);
+	        /*if(n.hasAttributes())
+	        	printTrees(n.getAttributes());*/
 	        printTrees(n.getChildNodes());
-	        System.out.printf("</%s>", n.getNodeName());
+	        //System.out.printf("</%s>", easyNodeName(n));
 
 	    } else if (n instanceof Document) {
 
 	        printTrees(n.getChildNodes());
 
 	    }
+	}
+
+	private String easyNodeName(Node n) {
+		String newName;
+		switch (n.getNodeName()) {
+        case "Target": newName = "Rules of the targets :"; System.out.printf(newName); System.out.printf("\n"); break;
+        case "AnyOf": newName = "At least one Rule need to be satisfied"; System.out.printf(newName); System.out.printf("\n"); break;
+        case "AllOf": newName = "Rule : "; System.out.printf(newName); System.out.printf("\n"); break;
+        //for Match we say it will always be String-equal
+        //case "Match": newName = "Next value need to be equal "; System.out.printf(newName); break;
+        case "AttributeDesignator": newName = n.getAttributes().item(0).getNodeValue();System.out.printf(" - "); System.out.printf(newName +" = "); break;
+        case "AttributeValue": newName = n.getChildNodes().item(0).getNodeValue(); System.out.printf(newName); System.out.printf("\n");  break;
+        default:newName = ""; break;
+		}
+		return newName;
 	}
 
 	public void printTrees(NodeList nodes) {
