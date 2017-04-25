@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Target> 
+  <AnyOf> 
+     <AllOf> 
+       <Match MatchId= "string-equal"> 
+        <AttributeDesignator  
+          Category="subject-category"  
+          AttributeId="subject-id" 
+          DataType="string"/> 
+        <AttributeValue DataType="string" 
+                   >physician</AttributeValue> 
+       </Match> 
+     </AllOf> 
+     <AllOf> 
+       <Match MatchId= "string-equal"> 
+        <AttributeDesignator 
+          Category="subject-category" 
+          AttributeId="subject-id" 
+          DataType="string"/> 
+        <AttributeValue DataType="string" 
+                   >nurse</AttributeValue> 
+       </Match> 
+       <Match MatchId= "string-equal"> 
+        <AttributeDesignator  
+          Category="subject-category" 
+          AttributeId="Location" 
+          DataType="string"/> 
+        <AttributeValue DataType="string" 
+              >emergency room</AttributeValue> 
+       </Match> 
+     </AllOf> 
+     <AllOf> 
+      <Match MatchId= "string-equal"> 
+       <AttributeDesignator 
+         Category="subject-category" 
+         AttributeId="subject-id" 
+         DataType="string"/> 
+       <AttributeValue DataType="string" 
+                     >nurse</AttributeValue> 
+      </Match> 
+      <Match MatchId= "string-equal"> 
+       <AttributeDesignator 
+         Category="subject-category" 
+         AttributeId="Location" 
+         DataType="string"/> 
+        <AttributeValue DataType="string" 
+             >operating room</AttributeValue> 
+     </Match> 
+    </AllOf> 
+   </AnyOf> 
+   <AnyOf> 
+    <AllOf> 
+     <Match MatchId= "string-equal"> 
+      <AttributeDesignator 
+        Category="resource-category" 
+        AttributeId="resource:resource-id" 
+        DataType="string"/> 
+      <AttributeValue DataType="string" 
+           >surgeries report</AttributeValue> 
+     </Match> 
+    </AllOf> 
+    <AllOf> 
+      <Match MatchId= "string-equal"> 
+       <AttributeDesignator  
+         Category="resource-category" 
+         AttributeId="resource:resource-id" 
+         DataType="string"/> 
+       <AttributeValue DataType="string" 
+                 >diagnosis</AttributeValue> 
+      </Match> 
+    </AllOf> 
+   </AnyOf> 
+   <AnyOf> 
+    <AllOf> 
+      <Match MatchId= "string-equal"> 
+       <AttributeDesignator  
+         Category="action-category" 
+         AttributeId="action:action-id" 
+         DataType="string"/> 
+       <AttributeValue DataType="string" 
+                       >read</AttributeValue> 
+      </Match> 
+    </AllOf> 
+   </AnyOf> 
+</Target>

@@ -1,4 +1,6 @@
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FormAttachment;
@@ -10,9 +12,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.wb.swt.SWTResourceManager;
-import org.eclipse.swt.events.MouseTrackAdapter;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseAdapter;
 
 public class Main {
 
@@ -23,14 +22,17 @@ public class Main {
 	/**
 	 * Launch the application.
 	 * @param args
+	 * @throws Exception 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		try {
 			Main window = new Main();
 			window.open();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		DomSample parser = new DomSample();
+		parser.parseXmlFile("exemple.xml");
 	}
 
 	/**
@@ -66,8 +68,8 @@ public class Main {
 			}
 		});
 		FormData fd_btnNewButton = new FormData();
-		fd_btnNewButton.left = new FormAttachment(0);
 		fd_btnNewButton.bottom = new FormAttachment(100);
+		fd_btnNewButton.left = new FormAttachment(0);
 		btnNewButton.setLayoutData(fd_btnNewButton);
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -92,7 +94,7 @@ public class Main {
 		fd_btnNewButton_2.bottom = new FormAttachment(100);
 		btnNewButton_2.setLayoutData(fd_btnNewButton_2);
 		
-		text = new Text(shell, SWT.BORDER);
+		text = new Text(shell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL);
 		fd_btnNewButton.top = new FormAttachment(text, 6);
 		text.setBackground(SWTResourceManager.getColor(SWT.COLOR_LINK_FOREGROUND));
 		FormData fd_text = new FormData();
