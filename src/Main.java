@@ -17,7 +17,8 @@ public class Main {
 
 	protected Shell shell;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
-	private Text text;
+	private Text textBox;
+	private static String easyXACML = "";
 
 	/**
 	 * Launch the application.
@@ -32,7 +33,7 @@ public class Main {
 			e.printStackTrace();
 		}
 		DomSample parser = new DomSample();
-		parser.parseXmlFile("exemple.xml");
+		easyXACML = parser.parseXmlFile("exemple.xml");
 	}
 
 	/**
@@ -60,50 +61,51 @@ public class Main {
 		shell.setText("SWT Application");
 		shell.setLayout(new FormLayout());
 		
-		Button btnNewButton = formToolkit.createButton(shell, "Save User Rights", SWT.NONE);
-		btnNewButton.addMouseListener(new MouseAdapter() {
+		Button saveButton = formToolkit.createButton(shell, "Save User Rights", SWT.NONE);
+		saveButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				System.out.println("wola");
 			}
 		});
-		FormData fd_btnNewButton = new FormData();
-		fd_btnNewButton.bottom = new FormAttachment(100);
-		fd_btnNewButton.left = new FormAttachment(0);
-		btnNewButton.setLayoutData(fd_btnNewButton);
-		btnNewButton.addSelectionListener(new SelectionAdapter() {
+		FormData fd_saveButton = new FormData();
+		fd_saveButton.bottom = new FormAttachment(100);
+		fd_saveButton.left = new FormAttachment(0);
+		saveButton.setLayoutData(fd_saveButton);
+		saveButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 			}
 		});
 		
-		Button btnNewButton_1 = formToolkit.createButton(shell, "Revert Changes", SWT.NONE);
-		fd_btnNewButton.right = new FormAttachment(btnNewButton_1, -6);
-		FormData fd_btnNewButton_1 = new FormData();
-		fd_btnNewButton_1.top = new FormAttachment(btnNewButton, 0, SWT.TOP);
-		fd_btnNewButton_1.bottom = new FormAttachment(100);
-		fd_btnNewButton_1.left = new FormAttachment(0, 134);
-		btnNewButton_1.setLayoutData(fd_btnNewButton_1);
+		Button revertButton = formToolkit.createButton(shell, "Revert Changes", SWT.NONE);
+		fd_saveButton.right = new FormAttachment(revertButton, -6);
+		FormData fd_revertButton = new FormData();
+		fd_revertButton.top = new FormAttachment(saveButton, 0, SWT.TOP);
+		fd_revertButton.bottom = new FormAttachment(100);
+		fd_revertButton.left = new FormAttachment(0, 134);
+		revertButton.setLayoutData(fd_revertButton);
 		
-		Button btnNewButton_2 = formToolkit.createButton(shell, "Show XACML", SWT.NONE);
-		fd_btnNewButton_1.right = new FormAttachment(100, -153);
-		FormData fd_btnNewButton_2 = new FormData();
-		fd_btnNewButton_2.left = new FormAttachment(btnNewButton_1, 6);
-		fd_btnNewButton_2.right = new FormAttachment(100);
-		fd_btnNewButton_2.top = new FormAttachment(100, -53);
-		fd_btnNewButton_2.bottom = new FormAttachment(100);
-		btnNewButton_2.setLayoutData(fd_btnNewButton_2);
+		Button XACMLButton = formToolkit.createButton(shell, "Show XACML", SWT.NONE);
+		fd_revertButton.right = new FormAttachment(100, -153);
+		FormData fd_XACMLButton = new FormData();
+		fd_XACMLButton.left = new FormAttachment(revertButton, 6);
+		fd_XACMLButton.right = new FormAttachment(100);
+		fd_XACMLButton.top = new FormAttachment(100, -53);
+		fd_XACMLButton.bottom = new FormAttachment(100);
+		XACMLButton.setLayoutData(fd_XACMLButton);
 		
-		text = new Text(shell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL);
-		fd_btnNewButton.top = new FormAttachment(text, 6);
-		text.setBackground(SWTResourceManager.getColor(SWT.COLOR_LINK_FOREGROUND));
-		FormData fd_text = new FormData();
-		fd_text.right = new FormAttachment(100);
-		fd_text.bottom = new FormAttachment(100, -59);
-		fd_text.top = new FormAttachment(0);
-		fd_text.left = new FormAttachment(0);
-		text.setLayoutData(fd_text);
-		formToolkit.adapt(text, true, true);
+		textBox = new Text(shell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL);
+		textBox.setText("File not found");
+		fd_saveButton.top = new FormAttachment(textBox, 6);
+		textBox.setBackground(SWTResourceManager.getColor(SWT.COLOR_LINK_FOREGROUND));
+		FormData fd_textBox = new FormData();
+		fd_textBox.right = new FormAttachment(100);
+		fd_textBox.bottom = new FormAttachment(100, -59);
+		fd_textBox.top = new FormAttachment(0);
+		fd_textBox.left = new FormAttachment(0);
+		textBox.setLayoutData(fd_textBox);
+		formToolkit.adapt(textBox, true, true);
 
 	}
 }
