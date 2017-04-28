@@ -1,3 +1,4 @@
+package xml.massat.dom;
 import java.io.File;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -40,7 +41,7 @@ public class DomSample {
 
 	    } else if (n instanceof Element) {
 	    	
-	    	easyNodeName(n);
+	    	textResult = textResult.concat(easyNodeName(n));
 	        printTrees(n.getChildNodes());
 	        easyNodeNameClosed(n);
 
@@ -77,23 +78,18 @@ public class DomSample {
 				temp = n.getAttributes();
 				for(int i = 0; i < temp.getLength();i++){
 					if(temp.item(i).getNodeName() == "Category"){
-						newName.concat("\n");
-			        	System.out.printf("\n"); 
+						newName = newName.concat("\n");
 			        	for(int j = 0; j < tabCount;j++){
-			        		newName.concat("\t");
-			        		System.out.printf("\t");
+			        		newName = newName.concat("\t");
 			        	}
 						if(temp.item(i).getNodeValue().contains("subject")){
-							newName.concat("Subject Allowed :");
-							System.out.print("Subject Allowed :");
+							newName = newName.concat("Subject Allowed :");
 						}
 						if(temp.item(i).getNodeValue().contains("resource")){
-							newName.concat("Resource Allowed :");
-							System.out.print("Resource Allowed :");
+							newName = newName.concat("Resource Allowed :");
 						}
 						if(temp.item(i).getNodeValue().contains("action")){
-							newName.concat("Action Allowed :");
-							System.out.print("Action Allowed :");
+							newName = newName.concat("Action Allowed :");
 						}
 			        	tabCount++;
 					}
@@ -105,10 +101,9 @@ public class DomSample {
 		switch (n.getNodeName()) {
         case "Target": 
          	for(int j = 0; j < tabCount;j++){
-        		newName.concat("\t");
-        		System.out.printf("\t");
+         		newName = newName.concat("\t");
         	}
-	        newName.concat("Acces rules :");  
+         	newName = newName.concat("Acces rules :");  
 	        break;
         //depend de ce qu'il va contenir : user, ressources, actions
         case "AnyOf": 
@@ -126,23 +121,21 @@ public class DomSample {
         	System.out.printf(newName +" = "); 
         	break;*/
         case "AttributeValue": 
-        	if(attributeValueCount != 0)
-        		System.out.print(", ");
+        	if(attributeValueCount != 0){
+        		newName = newName.concat(", ");
+        	}
         	else {
-        		System.out.printf("\n"); 
-        		for(int i = 0; i < tabCount;i++)
-	        		System.out.printf("\t");
+        		newName = newName.concat("\n");
+        		for(int i = 0; i < tabCount;i++){
+        			newName = newName.concat("\t");
+        		}
         	}
         	attributeValueCount++;
-        	newName = n.getChildNodes().item(0).getNodeValue(); 
-        	System.out.printf(newName);   
+        	newName = newName.concat(n.getChildNodes().item(0).getNodeValue());  
         	break;
         default:
-        	newName = ""; 
         	break;
 		}
-
-		
 		return newName;
 	}
 
