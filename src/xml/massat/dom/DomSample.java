@@ -15,7 +15,10 @@ public class DomSample {
 	
 	private int tabCount = 0;
 	private boolean anyOfCalled = false;
+	private boolean matchNumeric = false;
+	private String matchNumericSymbol = "";
 	private int attributeValueCount = 0;
+	private String attributeValue;
 	private String textResult = "";
 	// methodes d'analyse et d'affichage
 
@@ -43,7 +46,7 @@ public class DomSample {
 	    	
 	    	textResult = textResult.concat(easyNodeName(n));
 	        printTrees(n.getChildNodes());
-	        easyNodeNameClosed(n);
+	        textResult = textResult.concat(easyNodeNameClosed(n));
 
 	    } else if (n instanceof Document) {
 
@@ -60,7 +63,14 @@ public class DomSample {
 	        break;
         case "AllOf": 
         	attributeValueCount = 0;
+    		newName = newName.concat("\n");
 	        break;
+        case "Policy":
+        	tabCount--;
+        	break;
+        case "Rule":
+        	tabCount--;
+        	break;
         default:
         	newName = ""; 
         	break;
@@ -78,33 +88,36 @@ public class DomSample {
 				temp = n.getAttributes();
 				for(int i = 0; i < temp.getLength();i++){
 					if(temp.item(i).getNodeName() == "Category"){
-						newName = newName.concat("\n");
-			        	for(int j = 0; j < tabCount;j++){
+						for(int j = 0; j < tabCount;j++)
 			        		newName = newName.concat("\t");
-			        	}
-						if(temp.item(i).getNodeValue().contains("subject")){
-							newName = newName.concat("Subject Allowed :");
-						}
-						if(temp.item(i).getNodeValue().contains("resource")){
-							newName = newName.concat("Resource Allowed :");
-						}
-						if(temp.item(i).getNodeValue().contains("action")){
-							newName = newName.concat("Action Allowed :");
-						}
-			        	tabCount++;
+						if(temp.item(i).getNodeValue().contains("subject"))
+							newName = newName.concat("Subject Allowed :\n");
+						
+						if(temp.item(i).getNodeValue().contains("resource"))
+							newName = newName.concat("Resource Allowed :\n");
+						
+						if(temp.item(i).getNodeValue().contains("action"))
+							newName = newName.concat("Action Allowed :\n");
+						if(!matchNumeric)
+							newName = newName.concat("\t" + attributeValue);
+						else
+							attributeValue = "\t".concat(attributeValue);
+						tabCount++;
 					}
 				}
+				if(!matchNumeric)
+					attributeValue = "";
 				anyOfCalled = false;
 			}
 		}
 		
 		switch (n.getNodeName()) {
-        case "Target": 
-         	for(int j = 0; j < tabCount;j++){
-         		newName = newName.concat("\t");
-        	}
-         	newName = newName.concat("Acces rules :");  
-	        break;
+		//affichage inutil apres reflexion
+        /*case "Target": 
+        	for(int j = 0; j < tabCount;j++)
+        		newName = newName.concat("\t");
+         	newName = newName.concat("Acces rules :\n"); 
+	        break;*/
         //depend de ce qu'il va contenir : user, ressources, actions
         case "AnyOf": 
         	anyOfCalled = true;
@@ -114,28 +127,90 @@ public class DomSample {
         	System.out.printf("\n"); 
         	break;*/
         //for Match we say it will always be String-equal, but for later we can get the last part and do something.
-        //case "Match": newName = "Next value need to be equal "; System.out.printf(newName); break;
-       /* case "AttributeDesignator": 
-        	newName = n.getAttributes().item(0).getNodeValue();
-        	System.out.printf(" - "); 
-        	System.out.printf(newName +" = "); 
-        	break;*/
+        case "Match": 
+        	if(n.getAttributes().item(0).getNodeValue().contains("integer") || n.getAttributes().item(0).getNodeValue().contains("double")){
+        		matchNumeric = true;
+        		if(n.getAttributes().item(0).getNodeValue().contains("equal"))
+        			matchNumericSymbol = " = ";
+        		if(n.getAttributes().item(0).getNodeValue().contains("greater-than"))
+        			matchNumericSymbol = " > ";
+        		if(n.getAttributes().item(0).getNodeValue().contains("greater-than-or-equal"))
+        			matchNumericSymbol = " >= ";
+        		if(n.getAttributes().item(0).getNodeValue().contains("less-than"))
+        			matchNumericSymbol = " < ";
+        		if(n.getAttributes().item(0).getNodeValue().contains("less-than-or-equal"))
+        			matchNumericSymbol = " <= ";
+        	}
+        	break;
+        case "AttributeDesignator": 
+        	if(matchNumeric){
+	        	int indexTmp;
+	        	int tabNumber;
+	        	
+				temp = n.getAttributes();
+				for(int i = 0; i < temp.getLength();i++){
+					if(temp.item(i).getNodeName() == "AttributeId"){
+						tabNumber = attributeValue.lastIndexOf("\t")+1;
+			        	for(int j = 0; j < tabNumber;j++)
+			        		newName = newName.concat("\t");
+						if((indexTmp = temp.item(i).getNodeValue().lastIndexOf(":")) >=0)
+							newName = newName.concat(temp.item(i).getNodeValue().substring(indexTmp+1));
+						else
+							newName = newName.concat(temp.item(i).getNodeValue());
+						newName = newName.concat(matchNumericSymbol + attributeValue.substring(tabNumber));
+					}
+				}
+				matchNumeric = false;
+				matchNumericSymbol = "";
+				attributeValue = "";
+        	}
+        	break;
+        case "Policy":
+        	for(int j = 0; j < tabCount;j++){
+        		newName = newName.concat("\t");
+        	}
+        	tabCount++;
+        	newName = newName.concat("Algorythm to apply : ");
+			temp = n.getAttributes();
+			for(int i = 0; i < temp.getLength();i++){
+				if(temp.item(i).getNodeName() == "RuleCombiningAlgId"){
+					int indexPolicy = temp.item(i).getNodeValue().lastIndexOf("algorithm:");
+					newName = newName.concat(temp.item(i).getNodeValue().substring(indexPolicy+10));
+					newName = newName.concat("\n");
+				}
+			}
+        	break;
+        case "Rule":
+        	temp = n.getAttributes();
+			for(int i = 0; i < temp.getLength();i++){
+				if(temp.item(i).getNodeName() == "Effect"){
+					for(int j = 0; j < tabCount;j++)
+		        		newName = newName.concat("\t");
+					newName = newName.concat("Effect : " + temp.item(i).getNodeValue());
+					newName = newName.concat("\n");
+				}
+			}
+			tabCount++;
+        	break;
         case "AttributeValue": 
-        	if(attributeValueCount != 0){
+        	if(attributeValueCount != 0)
         		newName = newName.concat(", ");
-        	}
-        	else {
-        		newName = newName.concat("\n");
-        		for(int i = 0; i < tabCount;i++){
-        			newName = newName.concat("\t");
-        		}
-        	}
+        	else
+        		for(int j = 0; j < tabCount;j++)
+	        		newName = newName.concat("\t");
         	attributeValueCount++;
         	newName = newName.concat(n.getChildNodes().item(0).getNodeValue());  
         	break;
         default:
         	break;
 		}
+		
+		if(anyOfCalled || matchNumeric){
+			attributeValue = newName;
+			newName = "";
+		}
+		
+		
 		return newName;
 	}
 

@@ -28,7 +28,7 @@ public class Main {
 	private Text textBox;
 	private static String easyXACML = "";
 	private String XACML = "";
-	private static String file = "exemple.xml";
+	private static String file = "hierarchical-resource-policy.xml";
 
 	/**
 	 * Launch the application.
