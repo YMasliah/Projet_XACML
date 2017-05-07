@@ -1,0 +1,16 @@
+#how to add value in this DataModel file
+#first word is the name of the variable
+#second word is the category of the variable (action, subject,resource) and the identifier of the variable separated with a ":"
+#third word is the type of the variable (string or integer or double)
+#each word is separated with a ";"
+#example :
+#toto;subject-titi;string
+
+
+acces;action:id;string
+user;subject:id;string
+manager;subject:id;string
+employee;subject:id;string
+10;resource:candy;integer
+private data;resource:id;string
+3;resource:number_of_report;integer

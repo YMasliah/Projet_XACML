@@ -14,14 +14,17 @@ import org.w3c.dom.NodeList;
 public class DomSample {
 	
 	private int tabCount = 0;
-	private boolean anyOfCalled = false;
-	private boolean matchNumeric = false;
-	private String matchNumericSymbol = "";
 	private int attributeValueCount = 0;
+	private int policyCaseCount = 0;
+	
 	private String attributeValue;
 	private String textResult = "";
+	private String matchNumericSymbol = "";
+	
+	private boolean anyOfCalled = false;
+	private boolean matchNumeric = false;
+	
 	// methodes d'analyse et d'affichage
-
 	public String parseXmlFile(String fileName) throws Exception {
 
 		// preparer une usine a fabriquer les analyseurs DOM
@@ -67,6 +70,7 @@ public class DomSample {
 	        break;
         case "Policy":
         	tabCount--;
+        	policyCaseCount = 0;
         	break;
         case "Rule":
         	tabCount--;
@@ -184,8 +188,10 @@ public class DomSample {
         	temp = n.getAttributes();
 			for(int i = 0; i < temp.getLength();i++){
 				if(temp.item(i).getNodeName() == "Effect"){
+					policyCaseCount++;
 					for(int j = 0; j < tabCount;j++)
 		        		newName = newName.concat("\t");
+					newName = newName.concat("Case " + policyCaseCount + ", ");
 					newName = newName.concat("Effect : " + temp.item(i).getNodeValue());
 					newName = newName.concat("\n");
 				}
