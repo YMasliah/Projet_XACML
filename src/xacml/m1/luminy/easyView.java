@@ -21,13 +21,14 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import xml.massat.dom.XacmlToTxt;
 
-public class Main {
+public class easyView {
 
 	protected Shell shell;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
 	private Text textBox;
 	private static String easyXACML = "";
 	private String XACML = "";
+	private boolean currentViewXACML = false;
 	private static String file = "hierarchical-resource-policy.xml";
 
 	/**
@@ -40,7 +41,7 @@ public class Main {
 		easyXACML = txt.main(file);
 
 		try {
-			Main window = new Main();
+			easyView window = new easyView();
 			window.open();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -73,53 +74,50 @@ public class Main {
 		shell.setText("SWT Application");
 		shell.setLayout(new FormLayout());
 		
-		Button saveButton = formToolkit.createButton(shell, "Save User Rights", SWT.NONE);
-		saveButton.addMouseListener(new MouseAdapter() {
+		Button menuButton = formToolkit.createButton(shell, "Back to menu", SWT.NONE);
+		menuButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				System.out.println("wola");
 			}
 		});
-		FormData fd_saveButton = new FormData();
-		fd_saveButton.bottom = new FormAttachment(100);
-		fd_saveButton.left = new FormAttachment(0);
-		saveButton.setLayoutData(fd_saveButton);
-		saveButton.addSelectionListener(new SelectionAdapter() {
+		FormData fd_menuButton = new FormData();
+		fd_menuButton.left = new FormAttachment(0);
+		fd_menuButton.bottom = new FormAttachment(100);
+		menuButton.setLayoutData(fd_menuButton);
+		menuButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 			}
 		});
 		
-		Button revertButton = formToolkit.createButton(shell, "Revert Changes", SWT.NONE);
-		fd_saveButton.right = new FormAttachment(revertButton, -6);
-		FormData fd_revertButton = new FormData();
-		fd_revertButton.top = new FormAttachment(saveButton, 0, SWT.TOP);
-		fd_revertButton.bottom = new FormAttachment(100);
-		fd_revertButton.left = new FormAttachment(0, 134);
-		revertButton.setLayoutData(fd_revertButton);
-		
 		Button XACMLButton = formToolkit.createButton(shell, "Show XACML", SWT.NONE);
+		fd_menuButton.right = new FormAttachment(100, -232);
 		XACMLButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				XACML = "";
-				try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-
-					String sCurrentLine;
-
-					while ((sCurrentLine = br.readLine()) != null) {
-						XACML = XACML.concat(sCurrentLine +"\n");
+				if(!currentViewXACML){
+					XACML = "";
+					try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+	
+						String sCurrentLine;
+	
+						while ((sCurrentLine = br.readLine()) != null) {
+							XACML = XACML.concat(sCurrentLine +"\n");
+						}
+	
+					} catch (IOException f) {
+						f.printStackTrace();
 					}
-
-				} catch (IOException f) {
-					f.printStackTrace();
+					textBox.setText(XACML);
 				}
-				textBox.setText(XACML);
+				else
+					textBox.setText(easyXACML);
+				currentViewXACML = !currentViewXACML;	
 			}
 		});
-		fd_revertButton.right = new FormAttachment(100, -153);
 		FormData fd_XACMLButton = new FormData();
-		fd_XACMLButton.left = new FormAttachment(revertButton, 6);
+		fd_XACMLButton.left = new FormAttachment(menuButton, 6);
 		fd_XACMLButton.right = new FormAttachment(100);
 		fd_XACMLButton.top = new FormAttachment(100, -53);
 		fd_XACMLButton.bottom = new FormAttachment(100);
@@ -130,7 +128,7 @@ public class Main {
 			textBox.setText("File not found");
 		else
 			textBox.setText(easyXACML);
-		fd_saveButton.top = new FormAttachment(textBox, 6);
+		fd_menuButton.top = new FormAttachment(textBox, 6);
 		textBox.setBackground(SWTResourceManager.getColor(SWT.COLOR_LINK_FOREGROUND));
 		FormData fd_textBox = new FormData();
 		fd_textBox.right = new FormAttachment(100);
