@@ -17,7 +17,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 public class StartingMenu {
 
-	protected Shell shell;
+	protected static Shell shell;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
 
 	/**
@@ -55,7 +55,7 @@ public class StartingMenu {
 		shell = new Shell();
 		shell.setSize(397, 236);
 		shell.setMinimumSize(397, 236);
-		shell.setText("SWT Application");
+		shell.setText("XACML Toolkit Menu");
 		shell.setLayout(new FormLayout());
 		
 		Label lblXacml = formToolkit.createLabel(shell, "XACML 3.0", SWT.CENTER);
@@ -65,12 +65,12 @@ public class StartingMenu {
 		lblXacml.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		
 		
-		Button easyViewButton = formToolkit.createButton(shell, "Easy view \r\nfor not friendly\r\nXACML user",SWT.WRAP | SWT.CENTER);
+		Button easyViewButton = formToolkit.createButton(shell, "Easy view \r\nfor casual\r\nXACML user",SWT.WRAP | SWT.CENTER);
 		easyViewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				try {
-					easyView.main(null);
+					EasyView.main(null);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -88,11 +88,16 @@ public class StartingMenu {
 			}
 		});
 		
-		Button testViewButton = formToolkit.createButton(shell, "view for testing\r\nXACML file", SWT.WRAP | SWT.CENTER);
+		Button testViewButton = formToolkit.createButton(shell, "View for testing\r\nXACML file", SWT.WRAP | SWT.CENTER);
 		fd_lblXacml.right = new FormAttachment(testViewButton, 0, SWT.RIGHT);
-		testViewButton.addSelectionListener(new SelectionAdapter() {
+		testViewButton.addMouseListener(new MouseAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void mouseDown(MouseEvent e) {
+				try {
+					TestView.main(null);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		FormData fd_testViewButton = new FormData();
@@ -101,7 +106,17 @@ public class StartingMenu {
 		fd_testViewButton.bottom = new FormAttachment(100);
 		testViewButton.setLayoutData(fd_testViewButton);
 		
-		Button editorViewButton = formToolkit.createButton(shell, "editor view \r\nfor admin user\r\n", SWT.WRAP | SWT.CENTER);
+		Button editorViewButton = formToolkit.createButton(shell, "Editor view \r\nfor admin user\r\n", SWT.WRAP | SWT.CENTER);
+		editorViewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				try {
+					AdminEditor.main(null);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		fd_easyViewButton.top = new FormAttachment(editorViewButton, 0, SWT.TOP);
 		fd_testViewButton.left = new FormAttachment(editorViewButton, 6);
 		fd_easyViewButton.right = new FormAttachment(editorViewButton, -6);

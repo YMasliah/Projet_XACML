@@ -1,14 +1,12 @@
 package xacml.m1.luminy;
 
-import java.io.FileReader;
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -21,7 +19,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import xml.massat.dom.XacmlToTxt;
 
-public class easyView {
+public class EasyView {
 
 	protected Shell shell;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
@@ -41,7 +39,7 @@ public class easyView {
 		easyXACML = txt.main(file);
 
 		try {
-			easyView window = new easyView();
+			EasyView window = new EasyView();
 			window.open();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -69,30 +67,12 @@ public class easyView {
 	 */
 	protected void createContents() {
 		shell = new Shell();
-		shell.setBackground(SWTResourceManager.getColor(0, 0, 0));
+		shell.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		shell.setSize(450, 300);
-		shell.setText("SWT Application");
+		shell.setText("Easy view panel");
 		shell.setLayout(new FormLayout());
 		
-		Button menuButton = formToolkit.createButton(shell, "Back to menu", SWT.NONE);
-		menuButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseDown(MouseEvent e) {
-				System.out.println("wola");
-			}
-		});
-		FormData fd_menuButton = new FormData();
-		fd_menuButton.left = new FormAttachment(0);
-		fd_menuButton.bottom = new FormAttachment(100);
-		menuButton.setLayoutData(fd_menuButton);
-		menuButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-			}
-		});
-		
 		Button XACMLButton = formToolkit.createButton(shell, "Show XACML", SWT.NONE);
-		fd_menuButton.right = new FormAttachment(100, -232);
 		XACMLButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -110,25 +90,28 @@ public class easyView {
 						f.printStackTrace();
 					}
 					textBox.setText(XACML);
+					XACMLButton.setText("Show friendly view");
 				}
-				else
+				else{
 					textBox.setText(easyXACML);
+					XACMLButton.setText("Show XACML file");
+				}
 				currentViewXACML = !currentViewXACML;	
 			}
 		});
 		FormData fd_XACMLButton = new FormData();
-		fd_XACMLButton.left = new FormAttachment(menuButton, 6);
 		fd_XACMLButton.right = new FormAttachment(100);
 		fd_XACMLButton.top = new FormAttachment(100, -53);
 		fd_XACMLButton.bottom = new FormAttachment(100);
 		XACMLButton.setLayoutData(fd_XACMLButton);
 		
 		textBox = new Text(shell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL);
+		textBox.setEditable(false);
+		fd_XACMLButton.left = new FormAttachment(textBox, 0, SWT.LEFT);
 		if(easyXACML.equalsIgnoreCase(""))
 			textBox.setText("File not found");
 		else
 			textBox.setText(easyXACML);
-		fd_menuButton.top = new FormAttachment(textBox, 6);
 		textBox.setBackground(SWTResourceManager.getColor(SWT.COLOR_LINK_FOREGROUND));
 		FormData fd_textBox = new FormData();
 		fd_textBox.right = new FormAttachment(100);
