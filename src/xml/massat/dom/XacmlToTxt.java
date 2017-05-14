@@ -5,7 +5,6 @@ public class XacmlToTxt {
 	public String main(String file) throws Exception {
 		DomSample parser = new DomSample();
 		easyXACML = parser.parseXmlFile(file);
-		System.out.print(easyXACML);
 		return easyXACML;
 	}
 }

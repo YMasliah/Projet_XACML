@@ -24,22 +24,24 @@ public class EasyView {
 	protected Shell shell;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
 	private Text textBox;
-	private static String easyXACML = "";
+	private String easyXACML = "";
 	private String XACML = "";
 	private boolean currentViewXACML = false;
-	private static String file = "hierarchical-resource-policy.xml";
+	private String file = "hierarchical-resource-policy.xml";
 
 	/**
 	 * Launch the application.
 	 * @param args
 	 * @throws Exception 
 	 */
-	public static void main(String[] args) throws Exception {
+	public static void main(String file) throws Exception {
 		XacmlToTxt txt = new XacmlToTxt();
-		easyXACML = txt.main(file);
 
 		try {
 			EasyView window = new EasyView();
+			if(file != "")
+				window.file = file;
+			window.easyXACML = txt.main(window.file);
 			window.open();
 		} catch (Exception e) {
 			e.printStackTrace();

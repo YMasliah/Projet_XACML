@@ -3,13 +3,12 @@ package xacml.m1.luminy;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -48,6 +47,30 @@ public class StartingMenu {
 		}
 	}
 
+	protected String selectFile(){
+		String fileFilterPath = "F:/jdk1.5";
+
+		FileDialog fileDialog = new FileDialog(shell, SWT.MULTI);
+
+        fileDialog.setFilterPath(fileFilterPath);
+        
+        fileDialog.setFilterExtensions(new String[]{"*.xml", "*.txt", "*.*"});
+        fileDialog.setFilterNames(new String[]{ "XML Format", "Data Model (.txt)", "Any"});
+        
+        String firstFile = fileDialog.open();
+
+        if(firstFile != null) {
+          fileFilterPath = fileDialog.getFilterPath();
+          String[] selectedFiles = fileDialog.getFileNames();
+          StringBuffer sb = new StringBuffer(fileDialog.getFilterPath()+"\\");
+          for(int i=0; i<selectedFiles.length; i++) {
+            sb.append(selectedFiles[i]);
+          }
+          return sb.toString();
+        }
+        return "";
+	}
+	
 	/**
 	 * Create contents of the window.
 	 */
@@ -70,7 +93,7 @@ public class StartingMenu {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				try {
-					EasyView.main(null);
+					EasyView.main(selectFile());
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -81,13 +104,7 @@ public class StartingMenu {
 		FormData fd_easyViewButton = new FormData();
 		fd_easyViewButton.left = new FormAttachment(0);
 		fd_easyViewButton.bottom = new FormAttachment(100);
-		easyViewButton.setLayoutData(fd_easyViewButton);
-		easyViewButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-			}
-		});
-		
+		easyViewButton.setLayoutData(fd_easyViewButton);		
 		Button testViewButton = formToolkit.createButton(shell, "View for testing\r\nXACML file", SWT.WRAP | SWT.CENTER);
 		fd_lblXacml.right = new FormAttachment(testViewButton, 0, SWT.RIGHT);
 		testViewButton.addMouseListener(new MouseAdapter() {

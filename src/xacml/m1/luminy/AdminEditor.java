@@ -1,8 +1,8 @@
 package xacml.m1.luminy;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -18,8 +18,8 @@ public class AdminEditor {
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
 	private Text EditingBox;
 	private Text intBox;
-	private Button button;
-	private Button button_1;
+	private Button chooseDefaultTemplateButton;
+	private Button showFileGeneratedButton;
 
 	/**
 	 * Launch the application.
@@ -76,51 +76,56 @@ public class AdminEditor {
 		intBox.setLayoutData(fd_intBox);
 		formToolkit.adapt(intBox, true, true);
 		
-		Button DataModelButton = new Button(shlXacmlEditorPanel, SWT.NONE);
-		fd_intBox.bottom = new FormAttachment(DataModelButton, -6);
-		FormData fd_DataModelButton = new FormData();
-		fd_DataModelButton.right = new FormAttachment(100, -10);
-		fd_DataModelButton.left = new FormAttachment(0, 290);
-		fd_DataModelButton.top = new FormAttachment(0, 426);
-		DataModelButton.setLayoutData(fd_DataModelButton);
-		formToolkit.adapt(DataModelButton, true, true);
-		DataModelButton.setText("Open DataModel view");
-		
-		Button btnNewButton = new Button(shlXacmlEditorPanel, SWT.NONE);
-		fd_DataModelButton.bottom = new FormAttachment(btnNewButton, -6);
-		btnNewButton.addSelectionListener(new SelectionAdapter() {
+		Button dataModelButton = new Button(shlXacmlEditorPanel, SWT.NONE);
+		dataModelButton.addMouseListener(new MouseAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void mouseDown(MouseEvent e) {
+				try {
+					DataModel.main(null);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
-		FormData fd_btnNewButton = new FormData();
-		fd_btnNewButton.left = new FormAttachment(0, 290);
-		fd_btnNewButton.right = new FormAttachment(100, -10);
-		fd_btnNewButton.top = new FormAttachment(0, 464);
-		fd_btnNewButton.bottom = new FormAttachment(100);
-		btnNewButton.setLayoutData(fd_btnNewButton);
-		formToolkit.adapt(btnNewButton, true, true);
-		btnNewButton.setText("Save File");
+		fd_intBox.bottom = new FormAttachment(dataModelButton, -6);
+		FormData fd_dataModelButton = new FormData();
+		fd_dataModelButton.right = new FormAttachment(100, -10);
+		fd_dataModelButton.left = new FormAttachment(0, 290);
+		fd_dataModelButton.top = new FormAttachment(0, 426);
+		dataModelButton.setLayoutData(fd_dataModelButton);
+		formToolkit.adapt(dataModelButton, true, true);
+		dataModelButton.setText("Open DataModel view");
 		
-		button = new Button(shlXacmlEditorPanel, SWT.NONE);
-		button.setText("Open DataModel view");
-		FormData fd_button = new FormData();
-		fd_button.left = new FormAttachment(0, 10);
-		fd_button.right = new FormAttachment(DataModelButton, -6);
-		fd_button.top = new FormAttachment(DataModelButton, 0, SWT.TOP);
-		fd_button.bottom = new FormAttachment(DataModelButton, 0, SWT.BOTTOM);
-		button.setLayoutData(fd_button);
-		formToolkit.adapt(button, true, true);
+		Button saveButton = new Button(shlXacmlEditorPanel, SWT.NONE);
+		fd_dataModelButton.bottom = new FormAttachment(saveButton, -6);
+		FormData fd_saveButton = new FormData();
+		fd_saveButton.left = new FormAttachment(0, 290);
+		fd_saveButton.right = new FormAttachment(100, -10);
+		fd_saveButton.top = new FormAttachment(0, 464);
+		fd_saveButton.bottom = new FormAttachment(100);
+		saveButton.setLayoutData(fd_saveButton);
+		formToolkit.adapt(saveButton, true, true);
+		saveButton.setText("Save File");
 		
-		button_1 = new Button(shlXacmlEditorPanel, SWT.NONE);
-		button_1.setText("Save File");
-		FormData fd_button_1 = new FormData();
-		fd_button_1.left = new FormAttachment(0, 10);
-		fd_button_1.right = new FormAttachment(btnNewButton, -6);
-		fd_button_1.top = new FormAttachment(btnNewButton, 0, SWT.TOP);
-		fd_button_1.bottom = new FormAttachment(btnNewButton, 0, SWT.BOTTOM);
-		button_1.setLayoutData(fd_button_1);
-		formToolkit.adapt(button_1, true, true);
+		chooseDefaultTemplateButton = new Button(shlXacmlEditorPanel, SWT.NONE);
+		chooseDefaultTemplateButton.setText("Choose default template");
+		FormData fd_chooseDefaultTemplateButton = new FormData();
+		fd_chooseDefaultTemplateButton.left = new FormAttachment(0, 10);
+		fd_chooseDefaultTemplateButton.right = new FormAttachment(dataModelButton, -6);
+		fd_chooseDefaultTemplateButton.top = new FormAttachment(dataModelButton, 0, SWT.TOP);
+		fd_chooseDefaultTemplateButton.bottom = new FormAttachment(dataModelButton, 0, SWT.BOTTOM);
+		chooseDefaultTemplateButton.setLayoutData(fd_chooseDefaultTemplateButton);
+		formToolkit.adapt(chooseDefaultTemplateButton, true, true);
+		
+		showFileGeneratedButton = new Button(shlXacmlEditorPanel, SWT.NONE);
+		showFileGeneratedButton.setText("Show file generated");
+		FormData fd_showFileGeneratedButton = new FormData();
+		fd_showFileGeneratedButton.left = new FormAttachment(0, 10);
+		fd_showFileGeneratedButton.right = new FormAttachment(saveButton, -6);
+		fd_showFileGeneratedButton.top = new FormAttachment(saveButton, 0, SWT.TOP);
+		fd_showFileGeneratedButton.bottom = new FormAttachment(saveButton, 0, SWT.BOTTOM);
+		showFileGeneratedButton.setLayoutData(fd_showFileGeneratedButton);
+		formToolkit.adapt(showFileGeneratedButton, true, true);
 
 	}
 }
