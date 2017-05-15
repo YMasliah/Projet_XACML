@@ -13,6 +13,10 @@ public class DataItem {
 		this.type = type;
 	}
 	
+	public static final String categoryList[] = {"Choose category", "resource", "action", "subject"};
+	
+	public static final String typeList[] = {"Choose type", "string", "boolean", "integer", "time"};
+	
 	public enum CategoryList {
 		  RESOURCE ("resource"),
 		  ACTION ("action"),

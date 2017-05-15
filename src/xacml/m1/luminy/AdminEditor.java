@@ -1,5 +1,7 @@
 package xacml.m1.luminy;
 
+import org.eclipse.swt.widgets.Event;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -8,18 +10,22 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+
 
 public class AdminEditor {
 
 	protected Shell shlXacmlEditorPanel;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
-	private Text EditingBox;
 	private Text intBox;
 	private Button chooseDefaultTemplateButton;
 	private Button showFileGeneratedButton;
+	private Tree tree;
 
 	/**
 	 * Launch the application.
@@ -34,6 +40,20 @@ public class AdminEditor {
 		}
 	}
 
+	private void editTree(){
+		      TreeItem policy = new TreeItem(tree, 0);
+		      tree.addListener(SWT.Selection, new Listener() {
+		          public void handleEvent(Event event) {
+		              intBox.setText(event.item + " was selected");
+		          }
+		        });
+		      policy.setText("policy : 'choose an algorithm' ");
+		      TreeItem defaultCase = new TreeItem(policy, 0);
+		      defaultCase.setText("add variable which are trop for all cases");
+		      TreeItem case1 = new TreeItem(policy, 0);
+		      case1.setText("add variables which need to be present for this case");
+	}
+	
 	/**
 	 * Open the window.
 	 */
@@ -42,6 +62,7 @@ public class AdminEditor {
 		createContents();
 		shlXacmlEditorPanel.open();
 		shlXacmlEditorPanel.layout();
+		editTree();
 		while (!shlXacmlEditorPanel.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
@@ -58,20 +79,11 @@ public class AdminEditor {
 		shlXacmlEditorPanel.setText("XACML Editor Panel");
 		shlXacmlEditorPanel.setLayout(new FormLayout());
 		
-		EditingBox = new Text(shlXacmlEditorPanel, SWT.BORDER);
-		FormData fd_EditingBox = new FormData();
-		fd_EditingBox.top = new FormAttachment(0);
-		fd_EditingBox.left = new FormAttachment(0, 10);
-		EditingBox.setLayoutData(fd_EditingBox);
-		formToolkit.adapt(EditingBox, true, true);
-		
 		intBox = new Text(shlXacmlEditorPanel, SWT.BORDER);
-		fd_EditingBox.bottom = new FormAttachment(intBox, 0, SWT.BOTTOM);
-		fd_EditingBox.right = new FormAttachment(100, -295);
 		intBox.setEditable(false);
 		FormData fd_intBox = new FormData();
+		fd_intBox.left = new FormAttachment(0, 290);
 		fd_intBox.right = new FormAttachment(100, -10);
-		fd_intBox.left = new FormAttachment(EditingBox, 6);
 		fd_intBox.top = new FormAttachment(0);
 		intBox.setLayoutData(fd_intBox);
 		formToolkit.adapt(intBox, true, true);
@@ -126,6 +138,16 @@ public class AdminEditor {
 		fd_showFileGeneratedButton.bottom = new FormAttachment(saveButton, 0, SWT.BOTTOM);
 		showFileGeneratedButton.setLayoutData(fd_showFileGeneratedButton);
 		formToolkit.adapt(showFileGeneratedButton, true, true);
+		
+		tree = new Tree(shlXacmlEditorPanel, SWT.BORDER);
+		FormData fd_tree = new FormData();
+		fd_tree.right = new FormAttachment(intBox, -6);
+		fd_tree.bottom = new FormAttachment(intBox, 0, SWT.BOTTOM);
+		fd_tree.top = new FormAttachment(0);
+		fd_tree.left = new FormAttachment(chooseDefaultTemplateButton, 0, SWT.LEFT);
+		tree.setLayoutData(fd_tree);
+		formToolkit.adapt(tree);
+		formToolkit.paintBordersFor(tree);
 
 	}
 }

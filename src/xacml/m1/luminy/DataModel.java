@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -52,6 +54,16 @@ public class DataModel {
 		}
 	}
 
+	protected void addDataItem(String value, String category, String identifier, String type){
+		variables.add(new DataItem (value , category, identifier , type));
+	      TableItem item = new TableItem(table, SWT.NULL);
+	      item.setText("Item " + (variables.size()-1));
+	      item.setText(0, variables.get(variables.size()-1).value);
+	      item.setText(1, variables.get(variables.size()-1).category);
+	      item.setText(2, variables.get(variables.size()-1).identifier);
+	      item.setText(3, variables.get(variables.size()-1).type);
+	}
+	
 	protected void decodeDataFile(){
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 			
@@ -111,13 +123,24 @@ public class DataModel {
 		tblclmnType.setText("Type");
 		
 		Button saveFileButton = new Button(shlDataModelView, SWT.NONE);
+		saveFileButton.setEnabled(false);
 		FormData fd_saveFileButton = new FormData();
 		fd_saveFileButton.right = new FormAttachment(100);
 		fd_saveFileButton.bottom = new FormAttachment(100);
 		saveFileButton.setLayoutData(fd_saveFileButton);
-		saveFileButton.setText("Save");
+		saveFileButton.setText("Save in file");
 		
 		Button addItemButton = new Button(shlDataModelView, SWT.NONE);
+		addItemButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				try {
+					DataItemAdd.main(DataModel.this);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		fd_table.bottom = new FormAttachment(100, -62);
 		addItemButton.setText("Add new Item");
 		FormData fd_addItemButton = new FormData();
@@ -126,6 +149,21 @@ public class DataModel {
 		addItemButton.setLayoutData(fd_addItemButton);
 		
 		Button deleteCheckedItemButton = new Button(shlDataModelView, SWT.NONE);
+		deleteCheckedItemButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				try {
+					for(int i = table.getItemCount()-1; i >=0 ;i--){
+						if(table.getItem(i).getChecked()){
+							variables.remove(i);
+							table.remove(i);
+						}
+					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		fd_saveFileButton.left = new FormAttachment(deleteCheckedItemButton, 6);
 		fd_addItemButton.bottom = new FormAttachment(deleteCheckedItemButton, -6);
 		fd_addItemButton.right = new FormAttachment(100, -215);
@@ -137,6 +175,7 @@ public class DataModel {
 		deleteCheckedItemButton.setLayoutData(fd_deleteCheckedItemButton);
 		
 		Button openExistingDataButton = new Button(shlDataModelView, SWT.NONE);
+		openExistingDataButton.setEnabled(false);
 		openExistingDataButton.setText("Open existing Data Model");
 		FormData fd_openExistingDataButton = new FormData();
 		fd_openExistingDataButton.top = new FormAttachment(table, 6);
