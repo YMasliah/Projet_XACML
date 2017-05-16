@@ -362,5 +362,6 @@
 	<classpathentry kind="lib" path="D:/Program Files/Java/jdk1.8.0_121/lib/missioncontrol/plugins/org.w3c.dom.events_3.0.0.draft20060413_v201105210656.jar"/>
 	<classpathentry kind="lib" path="D:/Program Files/Java/jdk1.8.0_121/lib/missioncontrol/plugins/org.w3c.dom.smil_1.0.0.v200806040011.jar"/>
 	<classpathentry kind="lib" path="D:/Program Files/Java/jdk1.8.0_121/lib/missioncontrol/plugins/org.w3c.dom.svg_1.1.0.v201011041433.jar"/>
+	<classpathentry kind="lib" path="swing2swt.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

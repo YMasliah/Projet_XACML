@@ -27,17 +27,29 @@ public class DataModel {
 
 	/**
 	 * Launch the application.
-	 * @param args
+	 * @param string
 	 */
-	public static void main(String[] args) {
+	public static DataModel main(String string) {
+		DataModel window = null;
 		try {
-			DataModel window = new DataModel();
+			window = new DataModel();
 			window.open();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return window;
 	}
 
+	public static DataModel main(DataModel window) {
+		try {
+			window.open();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return window;
+	}
+	
+	
 	/**
 	 * Open the window.
 	 */
@@ -54,6 +66,10 @@ public class DataModel {
 		}
 	}
 
+	protected ArrayList<DataItem> getVariables(){
+		return variables;
+	}
+	
 	protected void addDataItem(String value, String category, String identifier, String type){
 		variables.add(new DataItem (value , category, identifier , type));
 	      TableItem item = new TableItem(table, SWT.NULL);

@@ -1,20 +1,24 @@
 package xacml.m1.luminy;
 
-import org.eclipse.swt.widgets.Event;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.forms.widgets.FormText;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 
@@ -22,10 +26,11 @@ public class AdminEditor {
 
 	protected Shell shlXacmlEditorPanel;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
-	private Text intBox;
 	private Button chooseDefaultTemplateButton;
 	private Button showFileGeneratedButton;
 	private Tree tree;
+	private DataModel myDataModel;
+	Composite entryComposite;
 
 	/**
 	 * Launch the application.
@@ -44,15 +49,79 @@ public class AdminEditor {
 		      TreeItem policy = new TreeItem(tree, 0);
 		      tree.addListener(SWT.Selection, new Listener() {
 		          public void handleEvent(Event event) {
-		              intBox.setText(event.item + " was selected");
+		              eventCalled(event);
 		          }
-		        });
+		      });
 		      policy.setText("policy : 'choose an algorithm' ");
+		      policy.setData("policy");
 		      TreeItem defaultCase = new TreeItem(policy, 0);
 		      defaultCase.setText("add variable which are trop for all cases");
+		      defaultCase.setData("case");
 		      TreeItem case1 = new TreeItem(policy, 0);
 		      case1.setText("add variables which need to be present for this case");
+		      case1.setData("case");
+		      
 	}
+
+	private void eventCalled(Event event) {
+	  
+	    Control[] childrens = entryComposite.getChildren();
+	    for (int i = 0 ; i < childrens.length; i++) {
+	        childrens[i].dispose();
+	    }
+		if(((String) event.item.getData()).contains("policy")){
+		    Combo comboAlgo = new Combo(entryComposite, SWT.READ_ONLY);
+		    comboAlgo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 0, 1));
+		    formToolkit.adapt(comboAlgo);
+		    formToolkit.paintBordersFor(comboAlgo);
+		    comboAlgo.setItems(XacmlImplemented.algorithmList);
+		    comboAlgo.setText("Choose algorithm");
+			
+			Button saveButton = new Button(entryComposite, SWT.NONE);
+			saveButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseDown(MouseEvent e) {
+					try {
+						TreeItem[] tempTree = tree.getItems();
+						for(TreeItem treeItem : tempTree)
+							if(((String) treeItem.getData()).contains("policy")){
+								treeItem.setData("policy : " + comboAlgo.getText());
+								treeItem.setText("policy : " + comboAlgo.getText());
+								break;
+							}
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
+			saveButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		    formToolkit.adapt(saveButton, true, true);
+		    saveButton.setText("save");
+		    
+		    FormText formText = formToolkit.createFormText(entryComposite, false);
+		    formToolkit.paintBordersFor(formText);
+		    formText.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 2, 1));
+		    formText.setText("Choose default rule to add", false, false);
+		    
+		    Combo combo = new Combo(entryComposite, SWT.READ_ONLY);
+		    combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
+		    formToolkit.adapt(combo);
+		    formToolkit.paintBordersFor(combo);
+			combo.setItems(XacmlImplemented.categoryList);
+			combo.setText("Choose category");
+		    
+		}
+		else if(event.item.getData() == "case"){
+			Combo combo = new Combo(entryComposite, SWT.NONE);
+		    combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		    formToolkit.adapt(combo);
+		    formToolkit.paintBordersFor(combo);
+			combo.setItems(DataItem.categoryList);
+			combo.setText("choose category");
+		}
+		entryComposite.layout();
+	}
+
 	
 	/**
 	 * Open the window.
@@ -79,27 +148,20 @@ public class AdminEditor {
 		shlXacmlEditorPanel.setText("XACML Editor Panel");
 		shlXacmlEditorPanel.setLayout(new FormLayout());
 		
-		intBox = new Text(shlXacmlEditorPanel, SWT.BORDER);
-		intBox.setEditable(false);
-		FormData fd_intBox = new FormData();
-		fd_intBox.left = new FormAttachment(0, 290);
-		fd_intBox.right = new FormAttachment(100, -10);
-		fd_intBox.top = new FormAttachment(0);
-		intBox.setLayoutData(fd_intBox);
-		formToolkit.adapt(intBox, true, true);
-		
 		Button dataModelButton = new Button(shlXacmlEditorPanel, SWT.NONE);
 		dataModelButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				try {
-					DataModel.main(null);
+					if(myDataModel == null)
+						myDataModel = DataModel.main("");
+					else
+						DataModel.main(myDataModel);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 			}
 		});
-		fd_intBox.bottom = new FormAttachment(dataModelButton, -6);
 		FormData fd_dataModelButton = new FormData();
 		fd_dataModelButton.right = new FormAttachment(100, -10);
 		fd_dataModelButton.left = new FormAttachment(0, 290);
@@ -109,6 +171,16 @@ public class AdminEditor {
 		dataModelButton.setText("Open DataModel view");
 		
 		Button saveButton = new Button(shlXacmlEditorPanel, SWT.NONE);
+		saveButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				try {
+					System.out.println(myDataModel.getVariables().get(1).category);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		fd_dataModelButton.bottom = new FormAttachment(saveButton, -6);
 		FormData fd_saveButton = new FormData();
 		fd_saveButton.left = new FormAttachment(0, 290);
@@ -141,13 +213,25 @@ public class AdminEditor {
 		
 		tree = new Tree(shlXacmlEditorPanel, SWT.BORDER);
 		FormData fd_tree = new FormData();
-		fd_tree.right = new FormAttachment(intBox, -6);
-		fd_tree.bottom = new FormAttachment(intBox, 0, SWT.BOTTOM);
+		fd_tree.bottom = new FormAttachment(chooseDefaultTemplateButton, -6);
 		fd_tree.top = new FormAttachment(0);
-		fd_tree.left = new FormAttachment(chooseDefaultTemplateButton, 0, SWT.LEFT);
+		fd_tree.right = new FormAttachment(100, -295);
+		fd_tree.left = new FormAttachment(0, 10);
 		tree.setLayoutData(fd_tree);
 		formToolkit.adapt(tree);
 		formToolkit.paintBordersFor(tree);
+		
+		entryComposite = new Composite(shlXacmlEditorPanel, SWT.NONE);
+		FormData fd_entryComposite = new FormData();
+		fd_entryComposite.bottom = new FormAttachment(dataModelButton, -6);
+		fd_entryComposite.top = new FormAttachment(tree, 0, SWT.TOP);
+		fd_entryComposite.right = new FormAttachment(tree, 285, SWT.RIGHT);
+		fd_entryComposite.left = new FormAttachment(tree, 6);
+		entryComposite.setLayoutData(fd_entryComposite);
+		formToolkit.adapt(entryComposite);
+		formToolkit.paintBordersFor(entryComposite);
+		GridLayout gridLayout = new GridLayout();
+	    entryComposite.setLayout(gridLayout);
 
 	}
 }
