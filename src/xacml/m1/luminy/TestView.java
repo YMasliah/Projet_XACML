@@ -3,8 +3,12 @@ package xacml.m1.luminy;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
+import java.io.*;
 
 public class TestView {
 
@@ -53,7 +57,28 @@ public class TestView {
 		Button btnNewButton = new Button(shlXacmlTestingPanel, SWT.NONE);
 		btnNewButton.setBounds(0, 199, 434, 62);
 		btnNewButton.setText("Test Query");
-
+		btnNewButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+          String  querry = text.getText();
+          launch(querry);
+			}
+		});
 	}
 
+
+public static void launch(String query) { 
+	try { 
+		String[] commands = { "cmd.exe", "/C", "java -jar valid/XACMLSMT.jar " ,query," >fichier.txt" };
+			//{"java"," -jar /bin/XACMLSMT.jar ",query," >fic.txt"}; 
+		Runtime.getRuntime().exec(commands);
+		Testresult.main();
+	} catch (IOException e) { 
+		e.printStackTrace();
+		} catch (Exception e) {
+		e.printStackTrace();
+	} 
+}
+
+	
 }
