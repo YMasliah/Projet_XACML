@@ -1,0 +1,16 @@
+usage: XACML-SMT [-d] [-h] [-m <arg>] [-p <arg>] [-q <arg>] [-smt] [-u]
+       [-v] [-xv <arg>] [-z3]
+XACML SMT Analysis Tool V2
+
+ -d          print policy variables and enum domains
+ -h          print the help
+ -m <arg>    number of models to list, [default 0]
+ -p <arg>    list of policies (order is important)
+ -q <arg>    query, [default `P_1']
+ -smt        show SMT encoding of policies
+ -u          show proof for UnSAT
+ -v          verbose (lots of console output)
+ -xv <arg>   XACML version; 2 for v2, 3 for v3, [default v3]
+ -z3         show Z3 output and statistics
+
+Please report issues to fturkmen(AT)gmail.com
