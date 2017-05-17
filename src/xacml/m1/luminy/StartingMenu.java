@@ -106,6 +106,7 @@ public class StartingMenu {
 		fd_easyViewButton.bottom = new FormAttachment(100);
 		easyViewButton.setLayoutData(fd_easyViewButton);		
 		Button testViewButton = formToolkit.createButton(shell, "View for testing\r\nXACML file", SWT.WRAP | SWT.CENTER);
+		testViewButton.setEnabled(false);
 		fd_lblXacml.right = new FormAttachment(testViewButton, 0, SWT.RIGHT);
 		testViewButton.addMouseListener(new MouseAdapter() {
 			@Override

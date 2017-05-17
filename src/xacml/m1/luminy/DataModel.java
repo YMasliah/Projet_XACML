@@ -28,12 +28,14 @@ public class DataModel {
 	/**
 	 * Launch the application.
 	 * @param string
+	 * @wbp.parser.entryPoint
 	 */
 	public static DataModel main(String string) {
 		DataModel window = null;
 		try {
 			window = new DataModel();
 			window.open();
+			window.decodeDataFile();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -43,6 +45,7 @@ public class DataModel {
 	public static DataModel main(DataModel window) {
 		try {
 			window.open();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -56,7 +59,6 @@ public class DataModel {
 	public void open() {
 		Display display = Display.getDefault();
 		createContents();
-		decodeDataFile();
 		shlDataModelView.open();
 		shlDataModelView.layout();
 		while (!shlDataModelView.isDisposed()) {

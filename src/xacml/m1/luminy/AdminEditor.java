@@ -30,7 +30,7 @@ public class AdminEditor {
 	private Button showFileGeneratedButton;
 	private Tree tree;
 	private DataModel myDataModel;
-	Composite entryComposite;
+	private Composite entryComposite;
 
 	/**
 	 * Launch the application.
@@ -55,12 +55,26 @@ public class AdminEditor {
 		      policy.setText("policy : 'choose an algorithm' ");
 		      policy.setData("policy");
 		      TreeItem defaultCase = new TreeItem(policy, 0);
-		      defaultCase.setText("add variable which are trop for all cases");
-		      defaultCase.setData("case");
+		      defaultCase.setText("Default case");
+		      defaultCase.setData("default case");
+		      TreeItem caseValue1 = new TreeItem(defaultCase, 0);
+		      caseValue1.setText("Action : access");
+		      caseValue1.setData("action : access");
 		      TreeItem case1 = new TreeItem(policy, 0);
-		      case1.setText("add variables which need to be present for this case");
-		      case1.setData("case");
-		      
+		      case1.setText("Case 0");
+		      case1.setData("case 0");
+		      TreeItem caseValue2 = new TreeItem(case1, 0);
+		      caseValue2.setText("Subject : user");
+		      caseValue2.setData("subject : user");
+		      TreeItem caseValue3 = new TreeItem(case1, 0);
+		      caseValue3.setText("Subject : manager");
+		      caseValue3.setData("subject : manager");
+		      TreeItem caseValue4 = new TreeItem(case1, 0);
+		      caseValue4.setText("Ressource : candy <= 10");
+		      caseValue4.setData("Ressource : candy <= 10");
+		      TreeItem caseFinal = new TreeItem(policy, 0);
+		      caseFinal.setText("Last case : Deny");
+		      caseFinal.setData("last case : deny");
 	}
 
 	private void eventCalled(Event event) {
@@ -101,7 +115,7 @@ public class AdminEditor {
 		    FormText formText = formToolkit.createFormText(entryComposite, false);
 		    formToolkit.paintBordersFor(formText);
 		    formText.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 2, 1));
-		    formText.setText("Choose default rule to add", false, false);
+		    formText.setText("Choose default case rule to add", false, false);
 		    
 		    Combo combo = new Combo(entryComposite, SWT.READ_ONLY);
 		    combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
@@ -110,14 +124,72 @@ public class AdminEditor {
 			combo.setItems(XacmlImplemented.categoryList);
 			combo.setText("Choose category");
 		    
+			//crée un any of dans le target par default avec la category definie
+			Button addDefaultButton = new Button(entryComposite, SWT.NONE);
+			addDefaultButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseDown(MouseEvent e) {
+					try {
+						
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
+			addDefaultButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		    formToolkit.adapt(addDefaultButton, true, true);
+		    addDefaultButton.setText("add");
+			
+		    //ajoute une regle, 
+			Button addCaseButton = new Button(entryComposite, SWT.NONE);
+			addCaseButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 4, 1));
+		    formToolkit.adapt(addCaseButton, true, true);
+		    addCaseButton.setText("add a case to the policy");
 		}
-		else if(event.item.getData() == "case"){
-			Combo combo = new Combo(entryComposite, SWT.NONE);
-		    combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		else if(((String) event.item.getData()).contains("case")){
+			Combo comboEffect = new Combo(entryComposite, SWT.READ_ONLY);
+			comboEffect.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 0, 1));
+		    formToolkit.adapt(comboEffect);
+		    formToolkit.paintBordersFor(comboEffect);
+		    comboEffect.setItems(XacmlImplemented.effectList);
+		    comboEffect.setText("Choose case effect");
+		    
+			Button saveButton = new Button(entryComposite, SWT.NONE);
+			saveButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseDown(MouseEvent e) {
+					try {
+
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
+			saveButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		    formToolkit.adapt(saveButton, true, true);
+		    saveButton.setText("save");
+			
+		    Combo combo = new Combo(entryComposite, SWT.READ_ONLY);
+		    combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 		    formToolkit.adapt(combo);
 		    formToolkit.paintBordersFor(combo);
-			combo.setItems(DataItem.categoryList);
-			combo.setText("choose category");
+			combo.setItems(XacmlImplemented.categoryList);
+			combo.setText("Choose category");
+		    
+			Button addCaseButton = new Button(entryComposite, SWT.NONE);
+			addCaseButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseDown(MouseEvent e) {
+					try {
+						
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
+			addCaseButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 3, 1));
+		    formToolkit.adapt(addCaseButton, true, true);
+		    addCaseButton.setText("add");
 		}
 		entryComposite.layout();
 	}
@@ -171,6 +243,7 @@ public class AdminEditor {
 		dataModelButton.setText("Open DataModel view");
 		
 		Button saveButton = new Button(shlXacmlEditorPanel, SWT.NONE);
+		saveButton.setEnabled(false);
 		saveButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -192,6 +265,7 @@ public class AdminEditor {
 		saveButton.setText("Save File");
 		
 		chooseDefaultTemplateButton = new Button(shlXacmlEditorPanel, SWT.NONE);
+		chooseDefaultTemplateButton.setEnabled(false);
 		chooseDefaultTemplateButton.setText("Choose default template");
 		FormData fd_chooseDefaultTemplateButton = new FormData();
 		fd_chooseDefaultTemplateButton.left = new FormAttachment(0, 10);
@@ -202,6 +276,7 @@ public class AdminEditor {
 		formToolkit.adapt(chooseDefaultTemplateButton, true, true);
 		
 		showFileGeneratedButton = new Button(shlXacmlEditorPanel, SWT.NONE);
+		showFileGeneratedButton.setEnabled(false);
 		showFileGeneratedButton.setText("Show file generated");
 		FormData fd_showFileGeneratedButton = new FormData();
 		fd_showFileGeneratedButton.left = new FormAttachment(0, 10);
