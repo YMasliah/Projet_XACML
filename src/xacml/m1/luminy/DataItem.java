@@ -13,6 +13,10 @@ public class DataItem {
 		this.type = type;
 	}
 	
+	public String toString(){
+		return "value : " + value + ", \ncategory : " + category + ", \nidentifier : " + identifier + ", \ntype : " + type;
+	}
+	
 	public static final String categoryList[] = {"Choose category", "resource", "action", "subject"};
 	
 	public static final String typeList[] = {"Choose type", "string", "boolean", "integer", "time"};

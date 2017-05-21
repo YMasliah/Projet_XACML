@@ -34,8 +34,8 @@ public class DataModel {
 		DataModel window = null;
 		try {
 			window = new DataModel();
-			window.open();
 			window.decodeDataFile();
+			window.open();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -45,7 +45,6 @@ public class DataModel {
 	public static DataModel main(DataModel window) {
 		try {
 			window.open();
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -96,14 +95,6 @@ public class DataModel {
 		} catch (IOException f) {
 			f.printStackTrace();
 		}
-		for (int loopIndex = 0; loopIndex < variables.size(); loopIndex++) {
-		      TableItem item = new TableItem(table, SWT.NULL);
-		      item.setText("Item " + loopIndex);
-		      item.setText(0, variables.get(loopIndex).value);
-		      item.setText(1, variables.get(loopIndex).category);
-		      item.setText(2, variables.get(loopIndex).identifier);
-		      item.setText(3, variables.get(loopIndex).type);
-		    }
 	}
 	
 	/**
@@ -202,5 +193,14 @@ public class DataModel {
 		fd_openExistingDataButton.right = new FormAttachment(100);
 		openExistingDataButton.setLayoutData(fd_openExistingDataButton);
 
+		
+		for (int loopIndex = 0; loopIndex < variables.size(); loopIndex++) {
+		      TableItem item = new TableItem(table, SWT.NULL);
+		      item.setText("Item " + loopIndex);
+		      item.setText(0, variables.get(loopIndex).value);
+		      item.setText(1, variables.get(loopIndex).category);
+		      item.setText(2, variables.get(loopIndex).identifier);
+		      item.setText(3, variables.get(loopIndex).type);
+		    }
 	}
 }
