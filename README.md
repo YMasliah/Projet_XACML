@@ -16,4 +16,6 @@ A FAIRE :
 editeur :
 finir les options possible de l'arbre pour les meme cas que la vue simple
 genere une politique
-recuperer une politique
+
+FUTURES AMELIORATIONS :
+recuperer une politique et generer le datamodel equivalent
