@@ -59,20 +59,27 @@ public class AdminEditor {
 		      defaultCase.setText("Default case");
 		      defaultCase.setData("default case");
 		      TreeItem caseValue1 = new TreeItem(defaultCase, 0);
-		      caseValue1.setText("access");
-		      caseValue1.setData("AnyOf:action:access:equal");
+		      caseValue1.setText("at least one line verified");
+		      caseValue1.setData("AnyOf");
+		      TreeItem caseValue10 = new TreeItem(caseValue1, 0);
+		      caseValue10.setText("access");
+		      caseValue10.setData("AllOf:action:access:id:equal");
+		      
 		      TreeItem case1 = new TreeItem(policy, 0);
-		      case1.setText("Case 0 : permit");
-		      case1.setData("case 0:permit");
-		      TreeItem caseValue2 = new TreeItem(case1, 0);
+		      case1.setText("Case : permit");
+		      case1.setData("case:permit");
+		      TreeItem caseValue11 = new TreeItem(case1, 0);
+		      caseValue11.setText("at least one line verified");
+		      caseValue11.setData("AnyOf");
+		      TreeItem caseValue2 = new TreeItem(caseValue11, 0);
 		      caseValue2.setText("user");
-		      caseValue2.setData("AnyOf:subject:user:equal");
-		      TreeItem caseValue3 = new TreeItem(case1, 0);
+		      caseValue2.setData("AllOf:subject:user:id:equal");
+		      TreeItem caseValue3 = new TreeItem(caseValue11, 0);
 		      caseValue3.setText("manager");
-		      caseValue3.setData("AnyOf:subject:manager:equal");
-		      TreeItem caseValue4 = new TreeItem(case1, 0);
+		      caseValue3.setData("AllOf:subject:manager:id:equal");
+		      TreeItem caseValue4 = new TreeItem(caseValue11, 0);
 		      caseValue4.setText("candy <= 10");
-		      caseValue4.setData("AnyOf:Ressource:10:candy:<=");
+		      caseValue4.setData("AllOf:Ressource:10:candy:<=");
 		      TreeItem caseFinal = new TreeItem(policy, 0);
 		      caseFinal.setText("Last case : Deny");
 		      caseFinal.setData("last case : deny");
@@ -115,21 +122,21 @@ public class AdminEditor {
 		    formToolkit.adapt(saveButton, true, true);
 		    saveButton.setText("save");
 		    
-		    FormText formText = formToolkit.createFormText(entryComposite, false);
+		    /* FormText formText = formToolkit.createFormText(entryComposite, false);
 		    formToolkit.paintBordersFor(formText);
 		    formText.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 3, 1));
 		    formText.setText("Choose default case rule to add", false, false);
 		    
 		    
-		    Combo combo = new Combo(entryComposite, SWT.READ_ONLY);
+		   Combo combo = new Combo(entryComposite, SWT.READ_ONLY);
 		    combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 4, 1));
 		    formToolkit.adapt(combo);
 		    formToolkit.paintBordersFor(combo);
 			combo.setItems(XacmlImplemented.categoryList);
-			combo.setText("Choose category");
+			combo.setText("Choose category");*/
 		    
 			//crée un any of dans le target par default avec la category definie
-			Button addDefaultButton = new Button(entryComposite, SWT.NONE);
+			/*Button addDefaultButton = new Button(entryComposite, SWT.NONE);
 			addDefaultButton.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseDown(MouseEvent e) {
@@ -150,68 +157,31 @@ public class AdminEditor {
 			});
 			addDefaultButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 5, 1));
 		    formToolkit.adapt(addDefaultButton, true, true);
-		    addDefaultButton.setText("add");
+		    addDefaultButton.setText("add");*/
 			
 		    //ajoute une regle, 
 			Button addCaseButton = new Button(entryComposite, SWT.NONE);
 			addCaseButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 6, 1));
 		    formToolkit.adapt(addCaseButton, true, true);
 		    addCaseButton.setText("add a case to the policy");
+		    addCaseButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseDown(MouseEvent e) {
+					try {
+						TreeItem case1 = new TreeItem((TreeItem) event.item, 0);
+					    case1.setText("Case : undefined");
+					    case1.setData("case:undefined");
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
 		}
 		else if(((String) event.item.getData()).contains("case")){
 			
-		    FormText formTextInfo = formToolkit.createFormText(entryComposite, false);
-		    formToolkit.paintBordersFor(formTextInfo);
-		    formTextInfo.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 0, 1));
-		    formTextInfo.setText((String) event.item.getData(), false, false);
-			
-			Combo comboEffect = new Combo(entryComposite, SWT.READ_ONLY);
-			comboEffect.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		    formToolkit.adapt(comboEffect);
-		    formToolkit.paintBordersFor(comboEffect);
-		    comboEffect.setItems(XacmlImplemented.effectList);
-		    comboEffect.setText("Choose case effect");
-		    
-			Button saveButton = new Button(entryComposite, SWT.NONE);
-			saveButton.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseDown(MouseEvent e) {
-					try {
-
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
-				}
-			});
-			saveButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 2, 1));
-		    formToolkit.adapt(saveButton, true, true);
-		    saveButton.setText("save");
-			
-		    Combo combo = new Combo(entryComposite, SWT.READ_ONLY);
-		    combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
-		    formToolkit.adapt(combo);
-		    formToolkit.paintBordersFor(combo);
-			combo.setItems(XacmlImplemented.categoryList);
-			combo.setText("Choose category");
-		    
-			Button addCaseButton = new Button(entryComposite, SWT.NONE);
-			addCaseButton.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseDown(MouseEvent e) {
-					try {
-						
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
-				}
-			});
-			addCaseButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 4, 1));
-		    formToolkit.adapt(addCaseButton, true, true);
-		    addCaseButton.setText("add");
-		    
 		    if(!((TreeItem) event.item).getText().equals("Default case")){
 			    Button removeBranchButton = new Button(entryComposite, SWT.NONE);
-			    removeBranchButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 5, 1));
+			    removeBranchButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false, 4, 1));
 			    formToolkit.adapt(removeBranchButton, true, true);
 			    removeBranchButton.setText("remove current position and all childs");
 			    removeBranchButton.addMouseListener(new MouseAdapter() {
@@ -224,9 +194,86 @@ public class AdminEditor {
 						}
 					}
 				});
+		    
+			    FormText formTextInfo = formToolkit.createFormText(entryComposite, false);
+			    formToolkit.paintBordersFor(formTextInfo);
+			    formTextInfo.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 0, 1));
+			    formTextInfo.setText((String) event.item.getData(), false, false);
+				
+				Combo comboEffect = new Combo(entryComposite, SWT.READ_ONLY);
+				comboEffect.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+			    formToolkit.adapt(comboEffect);
+			    formToolkit.paintBordersFor(comboEffect);
+			    comboEffect.setItems(XacmlImplemented.effectList);
+			    comboEffect.setText("Choose case effect");
+			    
+				Button saveButton = new Button(entryComposite, SWT.NONE);
+				saveButton.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseDown(MouseEvent e) {
+						try {
+							((TreeItem) event.item).setText("Case : ".concat(comboEffect.getText()));
+							event.item.setData("case:".concat(comboEffect.getText()));
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+					}
+				});
+				saveButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 2, 1));
+			    formToolkit.adapt(saveButton, true, true);
+			    saveButton.setText("save");
 		    }
+			Button addCaseButton = new Button(entryComposite, SWT.NONE);
+			addCaseButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseDown(MouseEvent e) {
+					try {
+						TreeItem case1 = new TreeItem((TreeItem) event.item, 0);
+					    case1.setText("at least one line verified");
+					    case1.setData("AnyOf");
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
+			addCaseButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 3, 1));
+		    formToolkit.adapt(addCaseButton, true, true);
+		    addCaseButton.setText("add an \"at least one verified\" group");
 		}
-		else if(!((String) event.item.getData()).equals("AnyOf:empty")){
+		else if(((String) event.item.getData()).equals("AnyOf")){
+			Button addCaseButton = new Button(entryComposite, SWT.NONE);
+			addCaseButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
+		    formToolkit.adapt(addCaseButton, true, true);
+		    addCaseButton.setText("Add a line");
+			addCaseButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseDown(MouseEvent e) {
+					try {
+						TreeItem case1 = new TreeItem((TreeItem) event.item, 0);
+					    case1.setText("To be defined");
+					    case1.setData("AllOf:empty");
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
+			
+		    Button removeBranchButton = new Button(entryComposite, SWT.NONE);
+		    removeBranchButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 3, 1));
+		    formToolkit.adapt(removeBranchButton, true, true);
+		    removeBranchButton.setText("remove current position and all childs");	
+		    removeBranchButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseDown(MouseEvent e) {
+					try {
+						((TreeItem) event.item).dispose();
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
+		}
+		else if(!((String) event.item.getData()).equals("AllOf:empty")){
 		    FormText formTextInfo = formToolkit.createFormText(entryComposite, false);
 		    formToolkit.paintBordersFor(formTextInfo);
 		    formTextInfo.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 0, 1));
@@ -246,23 +293,47 @@ public class AdminEditor {
 		    for(DataItem temp : myDataModel.getVariables())
 		    	combo.add(temp.value);
 			combo.setText("Choose value");
+		    
+			Combo comboEffect = new Combo(entryComposite, SWT.READ_ONLY);
+			comboEffect.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		    formToolkit.adapt(comboEffect);
+		    formToolkit.paintBordersFor(comboEffect);
+		    comboEffect.setItems(XacmlImplemented.matchList);
+		    comboEffect.setText("Choose match operator");
 			
 			Button addCaseButton = new Button(entryComposite, SWT.NONE);
 			addCaseButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
 		    formToolkit.adapt(addCaseButton, true, true);
-		    addCaseButton.setText("save");
+		    addCaseButton.setText("Add");
 			addCaseButton.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseDown(MouseEvent e) {
 					try {
 						((TreeItem) event.item).setText(combo.getText());
-						event.item.setData("AnyOf:aRecuperer:"+combo.getText()+":equal");
+						for(DataItem variable : myDataModel.getVariables())
+							if(variable.value.equalsIgnoreCase(combo.getText()))
+								event.item.setData("AllOf:"+variable.category+":"+variable.value+":"+variable.identifier+":equal");
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
 				}
 			});
-		    
+			
+			Button removeCaseButton = new Button(entryComposite, SWT.NONE);
+			removeCaseButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 2));
+		    formToolkit.adapt(removeCaseButton, true, true);
+		    removeCaseButton.setText("Remove");
+		    removeCaseButton.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseDown(MouseEvent e) {
+					try {
+
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
+			
 		    Button removeBranchButton = new Button(entryComposite, SWT.NONE);
 		    removeBranchButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 3, 1));
 		    formToolkit.adapt(removeBranchButton, true, true);
@@ -288,22 +359,24 @@ public class AdminEditor {
 		    	combo.add(temp.value);
 			combo.setText("Choose value");
 			
-			Button addCaseButton = new Button(entryComposite, SWT.NONE);
-			addCaseButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-		    formToolkit.adapt(addCaseButton, true, true);
-		    addCaseButton.setText("save");
-			addCaseButton.addMouseListener(new MouseAdapter() {
+			Button modifyCaseButton = new Button(entryComposite, SWT.NONE);
+			modifyCaseButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
+		    formToolkit.adapt(modifyCaseButton, true, true);
+		    modifyCaseButton.setText("save");
+		    modifyCaseButton.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseDown(MouseEvent e) {
 					try {
 						((TreeItem) event.item).setText(combo.getText());
-						event.item.setData("AnyOf:aRecuperer:"+combo.getText()+":equal");
+						for(DataItem variable : myDataModel.getVariables())
+							if(variable.value.equalsIgnoreCase(combo.getText()))
+								event.item.setData("AllOf:"+variable.category+":"+variable.value+":"+variable.identifier+":equal");
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
 				}
 			});
-		    
+		 			
 		    Button removeBranchButton = new Button(entryComposite, SWT.NONE);
 		    removeBranchButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 3, 1));
 		    formToolkit.adapt(removeBranchButton, true, true);
