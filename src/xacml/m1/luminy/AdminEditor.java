@@ -27,7 +27,7 @@ public class AdminEditor {
 
 	protected Shell shlXacmlEditorPanel;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
-	private Button chooseDefaultTemplateButton;
+	private Button exempleButton;
 	private Button showFileGeneratedButton;
 	private Tree tree;
 	private DataModel myDataModel;
@@ -58,34 +58,52 @@ public class AdminEditor {
 		      TreeItem defaultCase = new TreeItem(policy, 0);
 		      defaultCase.setText("Default case");
 		      defaultCase.setData("default case");
-		      TreeItem caseValue1 = new TreeItem(defaultCase, 0);
-		      caseValue1.setText("at least one line verified");
-		      caseValue1.setData("AnyOf");
-		      TreeItem caseValue10 = new TreeItem(caseValue1, 0);
-		      caseValue10.setText("access");
-		      caseValue10.setData("AllOf:action:access:id:equal");
-		      
-		      TreeItem case1 = new TreeItem(policy, 0);
-		      case1.setText("Case : permit");
-		      case1.setData("case:permit");
-		      TreeItem caseValue11 = new TreeItem(case1, 0);
-		      caseValue11.setText("at least one line verified");
-		      caseValue11.setData("AnyOf");
-		      TreeItem caseValue2 = new TreeItem(caseValue11, 0);
-		      caseValue2.setText("user");
-		      caseValue2.setData("AllOf:subject:user:id:equal");
-		      TreeItem caseValue3 = new TreeItem(caseValue11, 0);
-		      caseValue3.setText("manager");
-		      caseValue3.setData("AllOf:subject:manager:id:equal");
-		      TreeItem caseValue4 = new TreeItem(caseValue11, 0);
-		      caseValue4.setText("candy <= 10");
-		      caseValue4.setData("AllOf:Ressource:10:candy:<=");
-		      TreeItem caseFinal = new TreeItem(policy, 0);
-		      caseFinal.setText("Last case : Deny");
-		      caseFinal.setData("last case : deny");
-		      caseFinal.getText();
+			myDataModel = DataModel.main("");
+			
 	}
 
+	private void editTreeExemple(){
+		tree.removeAll();
+	      TreeItem policy = new TreeItem(tree, 0);
+	      tree.addListener(SWT.Selection, new Listener() {
+	          public void handleEvent(Event event) {
+	              eventCalled(event);
+	          }
+	      });
+	      policy.setText("policy : 'choose an algorithm' ");
+	      policy.setData("policy");
+	      TreeItem defaultCase = new TreeItem(policy, 0);
+	      defaultCase.setText("Default case");
+	      defaultCase.setData("default case");
+	      TreeItem caseValue1 = new TreeItem(defaultCase, 0);
+	      caseValue1.setText("at least one line verified");
+	      caseValue1.setData("AnyOf");
+	      TreeItem caseValue10 = new TreeItem(caseValue1, 0);
+	      caseValue10.setText("access");
+	      caseValue10.setData("AllOf:action:access:id:equal");
+	      
+	      TreeItem case1 = new TreeItem(policy, 0);
+	      case1.setText("Case : permit");
+	      case1.setData("case:permit");
+	      TreeItem caseValue11 = new TreeItem(case1, 0);
+	      caseValue11.setText("at least one line verified");
+	      caseValue11.setData("AnyOf");
+	      TreeItem caseValue2 = new TreeItem(caseValue11, 0);
+	      caseValue2.setText("user");
+	      caseValue2.setData("AllOf:subject:user:id:equal");
+	      TreeItem caseValue3 = new TreeItem(caseValue11, 0);
+	      caseValue3.setText("manager");
+	      caseValue3.setData("AllOf:subject:manager:id:equal");
+	      TreeItem caseValue4 = new TreeItem(caseValue11, 0);
+	      caseValue4.setText("candy <= 10");
+	      caseValue4.setData("AllOf:Ressource:10:candy:<=");
+	      TreeItem caseFinal = new TreeItem(policy, 0);
+	      caseFinal.setText("Last case : Deny");
+	      caseFinal.setData("last case : deny");
+	      caseFinal.getText();
+	      myDataModel = DataModel.main("exemple");
+}
+	
 	private void eventCalled(Event event) {
 
 	    Control[] childrens = entryComposite.getChildren();
@@ -423,12 +441,25 @@ public class AdminEditor {
 		shlXacmlEditorPanel.setLayout(new FormLayout());
 		
 		Button dataModelButton = new Button(shlXacmlEditorPanel, SWT.NONE);
-		chooseDefaultTemplateButton = new Button(shlXacmlEditorPanel, SWT.NONE);
+		exempleButton = new Button(shlXacmlEditorPanel, SWT.NONE);
 		Button saveButton = new Button(shlXacmlEditorPanel, SWT.NONE);
 		showFileGeneratedButton = new Button(shlXacmlEditorPanel, SWT.NONE);
 		entryComposite = new Composite(shlXacmlEditorPanel, SWT.NONE);
 		entryComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		tree = new Tree(shlXacmlEditorPanel, SWT.BORDER);
+		
+		
+		exempleButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				try {
+					editTreeExemple();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		
 		
 		dataModelButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -456,7 +487,7 @@ public class AdminEditor {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				try {
-					System.out.println(myDataModel.getVariables().get(1).category);
+
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -470,21 +501,19 @@ public class AdminEditor {
 		saveButton.setLayoutData(fd_saveButton);
 		formToolkit.adapt(saveButton, true, true);
 		saveButton.setText("Save File");
-		
-		chooseDefaultTemplateButton.setEnabled(false);
-		chooseDefaultTemplateButton.setText("Choose default template");
-		FormData fd_chooseDefaultTemplateButton = new FormData();
-		fd_chooseDefaultTemplateButton.left = new FormAttachment(0, 10);
-		fd_chooseDefaultTemplateButton.right = new FormAttachment(dataModelButton, -6);
-		fd_chooseDefaultTemplateButton.top = new FormAttachment(dataModelButton, 0, SWT.TOP);
-		fd_chooseDefaultTemplateButton.bottom = new FormAttachment(dataModelButton, 0, SWT.BOTTOM);
-		chooseDefaultTemplateButton.setLayoutData(fd_chooseDefaultTemplateButton);
-		formToolkit.adapt(chooseDefaultTemplateButton, true, true);
+		exempleButton.setText("Exemple");
+		FormData fd_exempleButton = new FormData();
+		fd_exempleButton.left = new FormAttachment(0, 10);
+		fd_exempleButton.right = new FormAttachment(dataModelButton, -6);
+		fd_exempleButton.top = new FormAttachment(dataModelButton, 0, SWT.TOP);
+		fd_exempleButton.bottom = new FormAttachment(dataModelButton, 0, SWT.BOTTOM);
+		exempleButton.setLayoutData(fd_exempleButton);
+		formToolkit.adapt(exempleButton, true, true);
 		
 
 		showFileGeneratedButton.setText("Show file generated");
 		FormData fd_showFileGeneratedButton = new FormData();
-		fd_showFileGeneratedButton.right = new FormAttachment(chooseDefaultTemplateButton, 0, SWT.RIGHT);
+		fd_showFileGeneratedButton.right = new FormAttachment(exempleButton, 0, SWT.RIGHT);
 		fd_showFileGeneratedButton.top = new FormAttachment(dataModelButton, 6);
 		fd_showFileGeneratedButton.bottom = new FormAttachment(100);
 		fd_showFileGeneratedButton.left = new FormAttachment(0, 10);

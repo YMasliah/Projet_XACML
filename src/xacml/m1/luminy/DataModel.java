@@ -34,8 +34,8 @@ public class DataModel {
 		DataModel window = null;
 		try {
 			window = new DataModel();
-			window.decodeDataFile();
-			window.open();
+			if(string.equals("exemple"))
+				window.decodeDataFile();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
